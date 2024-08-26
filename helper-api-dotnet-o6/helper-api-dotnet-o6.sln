@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "helper-api-dotnet-o6", "helper-api-dotnet-o6.csproj", "{81FE3075-DE51-444E-8F49-6185BF3A96EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "helper-api-dotnet-o6", "helper-api-dotnet-o6.csproj", "{81FE3075-DE51-444E-8F49-6185BF3A96EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "helper-api-dotnet-o6-investimento", "..\helper-api-dotnet-o6-investimento\helper-api-dotnet-o6-investimento.csproj", "{3F9299E9-8F02-4880-95E1-E0680773779A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{81FE3075-DE51-444E-8F49-6185BF3A96EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81FE3075-DE51-444E-8F49-6185BF3A96EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81FE3075-DE51-444E-8F49-6185BF3A96EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F9299E9-8F02-4880-95E1-E0680773779A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F9299E9-8F02-4880-95E1-E0680773779A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F9299E9-8F02-4880-95E1-E0680773779A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F9299E9-8F02-4880-95E1-E0680773779A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
