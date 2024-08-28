@@ -36,9 +36,9 @@ namespace helper_api_dotnet_o6.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
-        public IActionResult CalcularInvestimento(CalcularInvestimentoRequest request)
+        public async Task<IActionResult> CalcularInvestimento(CalcularInvestimentoRequest request)
         {
-            return Ok(_service.CalcularProvisaoInvestimento(request));
+            return Ok(await _service.CalcularProvisaoInvestimento(request));
         }
     }
 }

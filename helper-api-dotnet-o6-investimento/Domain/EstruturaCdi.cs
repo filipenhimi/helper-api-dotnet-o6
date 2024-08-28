@@ -2,6 +2,6 @@
 {
     public class EstruturaCdi
     {
-        public List<Cdi> CdisMensal { get; set; }
+        public List<DataValor> CdisMensal { get; set; }
     }
 }

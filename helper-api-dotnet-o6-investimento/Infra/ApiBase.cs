@@ -10,7 +10,7 @@ namespace helper_api_dotnet_o6_investimento.Infra
         {
             try
             {
-                var url = $"{BaseUri}/{action}";
+                var url = $"{BaseUri}{action}";
                 using (HttpClient httpClient = new())
                 {
                     HttpResponseMessage response = await httpClient.GetAsync(url);

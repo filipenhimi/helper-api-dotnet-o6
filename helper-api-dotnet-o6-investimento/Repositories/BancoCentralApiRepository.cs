@@ -7,15 +7,18 @@ namespace helper_api_dotnet_o6_investimento.Repositories
     {
         public BancoCentralApiRepository()
         {
-            this.BaseUri = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.4391/dados?formato=json";
+            this.BaseUri = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.";
         }
-        public async Task<List<Cdi>> ConsultarCdiMensal(string dataInicial = "01/08/2023", string dataFinal = "01/08/2024")
+        public async Task<List<DataValor>> ConsultarCdiMensal(string dataInicial = "01/08/2023", string dataFinal = "01/08/2024")
         {
-            //https://api.bcb.gov.br/dados/serie/bcdata.sgs.4391/dados?formato=json&dataInicial=01/08/2023&dataFinal=01/08/2024
-            string action = $"&dataInicial={dataInicial}&dataFinal={dataFinal}";
-            var result = await this.GetAsync<List<Cdi>>(action);
+            string action = $"4391/dados?formato=json&dataInicial={dataInicial}&dataFinal={dataFinal}";
+            return await GetAsync<List<DataValor>>(action);
+        }
 
-            return result;
+        public async Task<List<DataValor>> ConsultarSelicMensal(string dataInicial, string dataFinal)
+        {
+            string action = $"4390/dados?formato=json&dataInicial={dataInicial}&dataFinal={dataFinal}";
+            return await GetAsync<List<DataValor>>(action);
         }
     }
 }

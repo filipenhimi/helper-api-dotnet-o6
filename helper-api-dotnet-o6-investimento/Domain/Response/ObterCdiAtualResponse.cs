@@ -17,7 +17,7 @@ namespace helper_api_dotnet_o6_investimento.Domain.Response
         /// </summary>
         public string CdiUltimosAno { get; set; } = "";
 
-        public void PreencherValoresCdi(List<Cdi> cdis)
+        public void PreencherValoresCdi(List<DataValor> cdis)
         {
             if (cdis != null && cdis.Any())
             {

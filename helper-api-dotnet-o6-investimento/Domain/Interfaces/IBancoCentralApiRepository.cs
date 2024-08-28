@@ -2,6 +2,7 @@
 {
     public interface IBancoCentralApiRepository
     {
-        Task<List<Cdi>> ConsultarCdiMensal(string dataInicial, string dataFinal);
+        Task<List<DataValor>> ConsultarCdiMensal(string dataInicial, string dataFinal);
+        Task<List<DataValor>> ConsultarSelicMensal(string dataInicial, string dataFinal);
     }
 }
