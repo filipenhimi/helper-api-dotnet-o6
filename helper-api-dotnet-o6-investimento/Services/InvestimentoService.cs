@@ -37,13 +37,17 @@ namespace helper_api_dotnet_o6_investimento.Services
 
                 double taxaSelicTotal = ObterTaxaTotalPorMeses(await ObterTaxaSelicMensal(dataInicial, dataFinal), meses);
 
+                double taxaIpcaTotal = ObterTaxaTotalPorMeses(await ObterTaxaIpcaMensal(dataInicial, dataFinal), meses);
+
                 double taxaCdiMensalTotal = await ObterTaxaCdiMensalCalculada(request, meses, dataInicial, dataFinal);
 
                 double resultadoCdi = CalcularResultado(request.Valor, taxaCdiMensalTotal);
 
                 double resultadoSelic = CalcularResultado(request.Valor, taxaSelicTotal);
 
-                return new CalcularInvestimentoResponse(resultadoCdi, resultadoSelic);
+                double resultadoIpca = CalcularResultado(request.Valor, taxaIpcaTotal);
+
+                return new CalcularInvestimentoResponse(resultadoCdi, resultadoSelic, resultadoIpca);
             }
             catch (Exception ex)
             {
@@ -69,16 +73,20 @@ namespace helper_api_dotnet_o6_investimento.Services
         {
             List<DataValor> selicUltimoAno = await _bacenApi.ConsultarSelicMensal(dataInicial, dataFinal);
 
-            double selicMedia = selicUltimoAno.Average(r => r.Valor);
-            return selicMedia;
+            return selicUltimoAno.Average(r => r.Valor);
+        }
+
+        private async Task<double> ObterTaxaIpcaMensal(string dataInicial, string dataFinal)
+        {
+            List<DataValor> ipcaUltimoAno = await _bacenApi.ConsultarIpcaMensal(dataInicial, dataFinal);
+
+            return ipcaUltimoAno.Average(r => r.Valor);
         }
 
         private async Task<double> ObterTaxaCdiMensal(string dataInicial, string dataFinal)
         {
             List<DataValor> cdiUltimoAno = await _bacenApi.ConsultarCdiMensal(dataInicial, dataFinal);
-
-            double taxaCdiMensal = cdiUltimoAno.Average(r => r.Valor);
-            return taxaCdiMensal;
+            return cdiUltimoAno.Average(r => r.Valor);
         }
 
         private static double CalcularTaxaCdiMensal(double taxaCdiMensal, double porcentagemCdi) => (taxaCdiMensal * porcentagemCdi);
