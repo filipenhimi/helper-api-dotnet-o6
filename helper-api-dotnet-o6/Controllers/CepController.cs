@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -17,7 +18,8 @@ namespace helper_api_dotnet_o6.Controllers
         [HttpGet]
         [Route("{cep}")]
         [ProducesResponseType(typeof(CepResponse), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
         public async Task<IActionResult> ConsultaCep(string cep)
@@ -28,10 +30,14 @@ namespace helper_api_dotnet_o6.Controllers
 
                 if (cepResponse == null)
                 {
-                    return NoContent();
+                    return NotFound("CEP não encontrado.");
                 }
 
                 return Ok(cepResponse);
+            }
+            catch (HttpRequestException ex) when (ex.Message.Contains("BadRequest"))
+            {
+                return BadRequest("Ocorreu um erro na solicitação: " + ex.Message);
             }
             catch (Exception ex)
             {
@@ -44,8 +50,20 @@ namespace helper_api_dotnet_o6.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                var response = await httpClient.GetStringAsync($"{_endPoint}/{cep}");
-                return JsonSerializer.Deserialize<CepResponse>(response);
+                var response = await httpClient.GetAsync($"{_endPoint}/{cep}");
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    throw new HttpRequestException("BadRequest Error - Verifique o CEP informado e tente novamente.");
+                }
+                
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+                var responseString = await response.Content.ReadAsStringAsync();
+
+                return JsonSerializer.Deserialize<CepResponse>(responseString);
             }
         }
     }
