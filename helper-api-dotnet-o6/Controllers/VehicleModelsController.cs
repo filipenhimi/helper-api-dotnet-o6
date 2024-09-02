@@ -17,7 +17,7 @@ namespace helper_api_dotnet_o6.Controllers
         }
 
         [HttpGet]
-        [Route("{vehicleType}/brands/{brand}")]
+        [Route("{vehicleType}/brands/{brand}/models")]
         [ProducesResponseType(typeof(List<VehicleModels>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

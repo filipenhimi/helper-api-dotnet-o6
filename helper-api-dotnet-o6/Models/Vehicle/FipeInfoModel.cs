@@ -10,6 +10,7 @@
         public int modelYear { get; set; }
         public string price { get; set; }
         public string referenceMonth { get; set; }
-        public int vehicleType { get; set; }                                                   
+        public int vehicleType { get; set; }
+
     }
 }

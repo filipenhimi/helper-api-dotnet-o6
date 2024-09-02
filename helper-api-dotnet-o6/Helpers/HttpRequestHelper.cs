@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using helper_api_dotnet_o6.Models.Vehicle;
+using Newtonsoft.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace helper_api_dotnet_o6.Helpers
 {
@@ -18,6 +20,10 @@ namespace helper_api_dotnet_o6.Helpers
             string responseContent = await response.Content.ReadAsStringAsync();
             var deserializeResponse = JsonConvert.DeserializeObject<T>(responseContent);
             return deserializeResponse;
+           
+
+            
+            
         }
     }
 }
