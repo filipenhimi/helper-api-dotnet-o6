@@ -1,7 +1,6 @@
 ﻿using helper_api_dotnet_o6_investimento.Domain.Interfaces;
 using helper_api_dotnet_o6_investimento.Domain.Request;
 using helper_api_dotnet_o6_investimento.Domain.Response;
-using System.Diagnostics.Metrics;
 
 namespace helper_api_dotnet_o6_investimento.Services
 {
@@ -76,9 +75,7 @@ namespace helper_api_dotnet_o6_investimento.Services
 
             for (int i = 0; i < mes; i++)
             {
-                //i++;
-                lista.Add(new CalcularInvestimentoResponse(rendimentosCdi[i], rendimentosSelic[i], rendimentosIpca[i], $"Mês: {i +1}"));
-                //Console.WriteLine($"Mês {i + 1}: IPCA({mediaIpca}%): R${rendimentosIpca[i]:N2} SELIC({mediaSelic}%): R${rendimentosSelic[i]:N2} CDI({mediaCdi}%): R${rendimentosCdi[i]:N2}");
+                lista.Add(new CalcularInvestimentoResponse(rendimentosCdi[i], rendimentosSelic[i], rendimentosIpca[i], $"{i +1}"));
             }
             return lista;
         }
@@ -131,20 +128,13 @@ namespace helper_api_dotnet_o6_investimento.Services
         }
 
         private static double CalcularTaxaCdiMensal(double taxaCdiMensal, double porcentagemCdi) => (taxaCdiMensal * porcentagemCdi);
-        //private static int ObterMesesAteDataFim(DateTime dataFim)
-        //{
-        //    DateTime dataAtual = DateTime.Now;
-        //    int totalMeses = ((dataFim.Year - dataAtual.Year) * 12) + dataFim.Month - dataAtual.Month;
-        //    return totalMeses;
-        //}
         private static (string dataInicial, string dataFinal) ObterDatasConsultaTaxas()
         {
-            string dataFinal = ObterDataFormatoDiaMesAno(DateTime.Now);
-            string dataInicial = ObterDataFormatoDiaMesAno(DateTime.Now.AddMonths(-11));
+            string dataFinal = ObterDataFormatoDiaMesAno(DateTime.Now.AddMonths(-1));
+            string dataInicial = ObterDataFormatoDiaMesAno(DateTime.Now.AddMonths(-12));
 
             return (dataInicial, dataFinal);
         }
-        private static string ObterMediaMensalCdi(List<DataValor> cdis) => cdis.Average(r => r.Valor).ToString();
         private static double CalcularResultado(double valor, double taxa) => (valor * (taxa / 100)) + valor;
         private static double ConverterPorcentagemParaDecimal(double porcentagem) => porcentagem / 100;
         private static string ObterDataFormatoDiaMesAno(DateTime data) => "01/" + data.ToString("MM/yyyy");

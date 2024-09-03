@@ -21,9 +21,9 @@ namespace helper_api_dotnet_o6_investimento.Domain.Response
         {
             if (cdis != null && cdis.Any())
             {
-                CdiUltimosAno = cdis.Sum(r => r.Valor).ToString();
-                CdiMedioMensal = cdis.Average(r => r.Valor).ToString();
-                CdiUltimoMes = cdis.OrderBy(r => DateTime.ParseExact(r.Data, "dd/MM/yyyy", CultureInfo.InvariantCulture)).Last().Valor.ToString();
+                CdiUltimosAno = cdis.Sum(r => r.Valor).ToString("F2") + "%";
+                CdiMedioMensal = cdis.Average(r => r.Valor).ToString("F2") + "%";
+                CdiUltimoMes = cdis.OrderBy(r => DateTime.ParseExact(r.Data, "dd/MM/yyyy", CultureInfo.InvariantCulture)).Last().Valor.ToString("F2") + "%";
             }
         }
     }
