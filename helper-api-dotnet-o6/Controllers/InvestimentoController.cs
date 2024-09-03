@@ -30,17 +30,7 @@ namespace helper_api_dotnet_o6.Controllers
             return Ok(await _service.ObterCdiAtual());
         }
 
-        //[HttpPost]
-        //[Route("v1/calcular-investimento")]
-        //[ProducesResponseType(typeof(CalcularInvestimentoResponse), StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        //[ProducesResponseType(StatusCodes.Status502BadGateway)]
-        //public async Task<IActionResult> CalcularInvestimento(CalcularInvestimentoRequest request)
-        //{
-        //    return Ok(await _service.CalcularProvisaoInvestimento(request));
-        //}
-
+       
         [HttpPost]
         [Route("v1/calcular-investimentos")]
         [ProducesResponseType(typeof(CalcularInvestimentoResponse), StatusCodes.Status200OK)]

@@ -19,40 +19,17 @@ namespace helper_api_dotnet_o6_investimento.Services
             try
             {
                 var result = new ObterCdiAtualResponse();
+
+                var valoresCdi = _cache.Obter<ObterCdiAtualResponse>("valoresCdi");
+                if (valoresCdi is not null)
+                    return valoresCdi;
+
                 var (dataInicial, dataFinal) = ObterDatasConsultaTaxas();
                 var cdiUltimosMeses = await _bacenApi.ConsultarCdiMensal(dataInicial, dataFinal);
                 result.PreencherValoresCdi(cdiUltimosMeses);
+
+                _cache.Salvar("valoresCdi", result, TimeSpan.FromMinutes(5));
                 return result;
-            }
-            catch (Exception ex)
-            {
-                //WriteTrace
-                throw;
-            }
-        }
-        public async Task<CalcularInvestimentoResponse> CalcularProvisaoInvestimento(CalcularInvestimentoRequest request)
-        {
-            try
-            {
-                int meses = request.QuantidadeMeses;
-
-                (string dataInicial, string dataFinal) = ObterDatasConsultaTaxas();
-
-                double taxaSelicTotal = ObterTaxaTotalPorMeses(await ObterTaxaSelicMensal(dataInicial, dataFinal), meses);
-
-                _cache.Salvar("Selic", taxaSelicTotal, TimeSpan.FromMinutes(5));
-
-                double taxaIpcaTotal = ObterTaxaTotalPorMeses(await ObterTaxaIpcaMensal(dataInicial, dataFinal), meses);
-
-                double taxaCdiMensalTotal = await ObterTaxaCdiMensalCalculada(request, meses, dataInicial, dataFinal);
-
-                double resultadoCdi = CalcularResultado(request.Valor, taxaCdiMensalTotal);
-
-                double resultadoSelic = CalcularResultado(request.Valor, taxaSelicTotal);
-
-                double resultadoIpca = CalcularResultado(request.Valor, taxaIpcaTotal);
-
-                return new CalcularInvestimentoResponse(resultadoCdi, resultadoSelic, resultadoIpca);
             }
             catch (Exception ex)
             {
@@ -67,7 +44,7 @@ namespace helper_api_dotnet_o6_investimento.Services
             var mes = request.QuantidadeMeses;
             var taxaCdi = request.PorcentagemCdi;
 
-            Taxas? taxas = await ObterTaxas(taxaCdi);
+             var taxas = await ObterTaxas(taxaCdi);
 
             var rendimentosSelic = CalcularRendimentos(valorInicial, taxas.Selic, mes);
             var rendimentosIpca = CalcularRendimentos(valorInicial, taxas.Ipca, mes);
@@ -82,20 +59,20 @@ namespace helper_api_dotnet_o6_investimento.Services
             return lista;
         }
 
-        private async Task<Taxas?> ObterTaxas(double taxaCdi)
+        private async Task<Taxas> ObterTaxas(double taxaCdi)
         {
             (string dataInicial, string dataFinal) = ObterDatasConsultaTaxas();
 
             var taxas = _cache.Obter<Taxas>("taxas");
 
-            if (taxas is null)
-            {
-                var mediaSelic = await ObterTaxaSelicMensal(dataInicial, dataFinal);
-                var mediaCdi = await ObterTaxaCdiMensal(dataInicial, dataFinal) * ConverterPorcentagemParaDecimal(taxaCdi);
-                var mediaIpca = await ObterTaxaIpcaMensal(dataInicial, dataFinal);
-                taxas = new Taxas(mediaSelic, mediaIpca, mediaCdi);
-                _cache.Salvar("taxas", taxas, TimeSpan.FromMinutes(5));
-            }
+            if (taxas is not null)
+                return taxas;
+
+            var mediaSelic = await ObterTaxaSelicMensal(dataInicial, dataFinal);
+            var mediaCdi = await ObterTaxaCdiMensal(dataInicial, dataFinal) * ConverterPorcentagemParaDecimal(taxaCdi);
+            var mediaIpca = await ObterTaxaIpcaMensal(dataInicial, dataFinal);
+            taxas = new Taxas(mediaSelic, mediaIpca, mediaCdi);
+            _cache.Salvar("taxas", taxas, TimeSpan.FromMinutes(5));
 
             return taxas;
         }
@@ -116,16 +93,16 @@ namespace helper_api_dotnet_o6_investimento.Services
 
         private double ObterTaxaTotalPorMeses(double taxa, int meses) => taxa * meses;
 
-        private async Task<double> ObterTaxaCdiMensalCalculada(CalcularInvestimentoRequest request, int meses, string dataInicial, string dataFinal)
-        {
-            double taxaCdiMensal = await ObterTaxaCdiMensal(dataInicial, dataFinal);
+        //private async Task<double> ObterTaxaCdiMensalCalculada(CalcularInvestimentoRequest request, int meses, string dataInicial, string dataFinal)
+        //{
+        //    double taxaCdiMensal = await ObterTaxaCdiMensal(dataInicial, dataFinal);
 
-            double porcentagemCdi = ConverterPorcentagemParaDecimal(request.PorcentagemCdi);
+        //    double porcentagemCdi = ConverterPorcentagemParaDecimal(request.PorcentagemCdi);
 
-            double taxaCdiMensalCalculada = CalcularTaxaCdiMensal(taxaCdiMensal, porcentagemCdi);
+        //    double taxaCdiMensalCalculada = CalcularTaxaCdiMensal(taxaCdiMensal, porcentagemCdi);
 
-            return ObterTaxaTotalPorMeses(taxaCdiMensalCalculada, meses);
-        }
+        //    return ObterTaxaTotalPorMeses(taxaCdiMensalCalculada, meses);
+        //}
 
         private async Task<double> ObterTaxaSelicMensal(string dataInicial, string dataFinal)
         {
@@ -147,7 +124,7 @@ namespace helper_api_dotnet_o6_investimento.Services
             return cdiUltimoAno.Average(r => r.Valor);
         }
 
-        private static double CalcularTaxaCdiMensal(double taxaCdiMensal, double porcentagemCdi) => (taxaCdiMensal * porcentagemCdi);
+        //private static double CalcularTaxaCdiMensal(double taxaCdiMensal, double porcentagemCdi) => (taxaCdiMensal * porcentagemCdi);
         private static (string dataInicial, string dataFinal) ObterDatasConsultaTaxas()
         {
             string dataFinal = ObterDataFormatoDiaMesAno(DateTime.Now.AddMonths(-1));
@@ -155,7 +132,7 @@ namespace helper_api_dotnet_o6_investimento.Services
 
             return (dataInicial, dataFinal);
         }
-        private static double CalcularResultado(double valor, double taxa) => (valor * (taxa / 100)) + valor;
+        //private static double CalcularResultado(double valor, double taxa) => (valor * (taxa / 100)) + valor;
         private static double ConverterPorcentagemParaDecimal(double porcentagem) => porcentagem / 100;
         private static string ObterDataFormatoDiaMesAno(DateTime data) => "01/" + data.ToString("MM/yyyy");
     }
