@@ -48,7 +48,7 @@ namespace helper_api_dotnet_o6_investimento.Services
 
             var rendimentosSelic = CalcularRendimentos(valorInicial, taxas.Selic, mes);
             var rendimentosIpca = CalcularRendimentos(valorInicial, taxas.Ipca, mes);
-            var rendimentosCdi = CalcularRendimentos(valorInicial, taxas.Cdi, mes);
+            var rendimentosCdi = CalcularRendimentos(valorInicial, taxas.Cdi * ConverterPorcentagemParaDecimal(taxaCdi), mes);
 
             var lista = new List<CalcularInvestimentoResponse>();
 
@@ -69,7 +69,7 @@ namespace helper_api_dotnet_o6_investimento.Services
                 return taxas;
 
             var mediaSelic = await ObterTaxaSelicMensal(dataInicial, dataFinal);
-            var mediaCdi = await ObterTaxaCdiMensal(dataInicial, dataFinal) * ConverterPorcentagemParaDecimal(taxaCdi);
+            var mediaCdi = await ObterTaxaCdiMensal(dataInicial, dataFinal);
             var mediaIpca = await ObterTaxaIpcaMensal(dataInicial, dataFinal);
             taxas = new Taxas(mediaSelic, mediaIpca, mediaCdi);
             _cache.Salvar("taxas", taxas, TimeSpan.FromMinutes(5));
