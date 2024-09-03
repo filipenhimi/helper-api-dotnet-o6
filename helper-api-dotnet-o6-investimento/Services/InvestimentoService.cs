@@ -1,6 +1,7 @@
 ﻿using helper_api_dotnet_o6_investimento.Domain.Interfaces;
 using helper_api_dotnet_o6_investimento.Domain.Request;
 using helper_api_dotnet_o6_investimento.Domain.Response;
+using System.Diagnostics.Metrics;
 
 namespace helper_api_dotnet_o6_investimento.Services
 {
@@ -31,7 +32,7 @@ namespace helper_api_dotnet_o6_investimento.Services
         {
             try
             {
-                int meses = ObterMesesAteDataFim(request.DataFim);
+                int meses = request.QuantidadeMeses;
 
                 (string dataInicial, string dataFinal) = ObterDatasConsultaTaxas();
 
@@ -54,6 +55,46 @@ namespace helper_api_dotnet_o6_investimento.Services
                 //WriteTrace
                 throw;
             }
+        }
+
+        public async Task<List<CalcularInvestimentoResponse>> CalcularProvisaoInvestimentos(CalcularInvestimentoRequest request)
+        {
+            var valorInicial = request.Valor;
+            var mes = request.QuantidadeMeses;
+            var taxaCdi = request.PorcentagemCdi;
+            (string dataInicial, string dataFinal) = ObterDatasConsultaTaxas();
+
+            var mediaSelic = await ObterTaxaSelicMensal(dataInicial, dataFinal);
+            var mediaCdi = await ObterTaxaCdiMensal(dataInicial, dataFinal) * ConverterPorcentagemParaDecimal(taxaCdi);
+            var mediaIpca = await ObterTaxaIpcaMensal(dataInicial, dataFinal);
+
+            var rendimentosSelic = CalcularRendimentos(valorInicial, mediaSelic, mes);
+            var rendimentosIpca = CalcularRendimentos(valorInicial, mediaIpca, mes);
+            var rendimentosCdi = CalcularRendimentos(valorInicial, mediaCdi, mes);
+
+            var lista = new List<CalcularInvestimentoResponse>();
+
+            for (int i = 0; i < mes; i++)
+            {
+                //i++;
+                lista.Add(new CalcularInvestimentoResponse(rendimentosCdi[i], rendimentosSelic[i], rendimentosIpca[i], $"Mês: {i +1}"));
+                //Console.WriteLine($"Mês {i + 1}: IPCA({mediaIpca}%): R${rendimentosIpca[i]:N2} SELIC({mediaSelic}%): R${rendimentosSelic[i]:N2} CDI({mediaCdi}%): R${rendimentosCdi[i]:N2}");
+            }
+            return lista;
+        }
+
+        static List<double> CalcularRendimentos(double valorInicial, double taxaCdiMensal, int meses)
+        {
+            List<double> rendimentos = new List<double>(meses);
+            double valorAtual = valorInicial;
+
+            for (int i = 1; i <= meses; i++)
+            {
+                valorAtual += valorAtual * (taxaCdiMensal / 100);
+                rendimentos.Add(valorAtual);
+            }
+
+            return rendimentos;
         }
 
         private double ObterTaxaTotalPorMeses(double taxa, int meses) => taxa * meses;
@@ -90,12 +131,12 @@ namespace helper_api_dotnet_o6_investimento.Services
         }
 
         private static double CalcularTaxaCdiMensal(double taxaCdiMensal, double porcentagemCdi) => (taxaCdiMensal * porcentagemCdi);
-        private static int ObterMesesAteDataFim(DateTime dataFim)
-        {
-            DateTime dataAtual = DateTime.Now;
-            int totalMeses = ((dataFim.Year - dataAtual.Year) * 12) + dataFim.Month - dataAtual.Month;
-            return totalMeses;
-        }
+        //private static int ObterMesesAteDataFim(DateTime dataFim)
+        //{
+        //    DateTime dataAtual = DateTime.Now;
+        //    int totalMeses = ((dataFim.Year - dataAtual.Year) * 12) + dataFim.Month - dataAtual.Month;
+        //    return totalMeses;
+        //}
         private static (string dataInicial, string dataFinal) ObterDatasConsultaTaxas()
         {
             string dataFinal = ObterDataFormatoDiaMesAno(DateTime.Now);

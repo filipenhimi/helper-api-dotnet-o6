@@ -2,14 +2,24 @@
 {
     public class CalcularInvestimentoResponse
     {
-        public CalcularInvestimentoResponse(double valorCdi, double valorSelic, double valorIpca)
+        //public CalcularInvestimentoResponse()
+        //{
+            
+        //}
+        public CalcularInvestimentoResponse(double valorCdi, double valorSelic, double valorIpca, string mes = "")
         {
-            ValorCdi = valorCdi;
-            ValorSelic = valorSelic;
-            ValorIpca = valorIpca;
+            Mes = mes;
+            ValorCdi = valorCdi.ToString();
+            ValorSelic = valorSelic.ToString();
+            ValorIpca = valorIpca.ToString();
         }
-        public double ValorCdi { get; set; }
-        public double ValorIpca { get; set; }
-        public double ValorSelic { get; set; }
+        //public double ValorCdi { get; set; }
+        //public double ValorIpca { get; set; }
+        //public double ValorSelic { get; set; }
+
+        public string Mes { get; set; }
+        public string ValorCdi { get; set; }
+        public string ValorIpca { get; set; }
+        public string ValorSelic { get; set; }
     }
 }

@@ -6,6 +6,6 @@
         public double CdiMensal { get; set; }
         public double Valor {  get; set; }
         public double PorcentagemCdi { get; set; }
-        public DateTime DataFim { get; set; }
+        public int QuantidadeMeses { get; set; }
     }
 }
