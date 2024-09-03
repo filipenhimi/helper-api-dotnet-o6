@@ -1,3 +1,4 @@
+using helper_api_dotnet_o6.Configure;
 using helper_api_dotnet_o6_investimento.Domain.Interfaces;
 using helper_api_dotnet_o6_investimento.Repositories;
 using helper_api_dotnet_o6_investimento.Services;
@@ -11,19 +12,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IInvestimentoService, InvestimentoService>();
-builder.Services.AddScoped<IBancoCentralApiRepository, BancoCentralApiRepository>();
+builder.Services.AddCustomServices();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowInvestimento",
-        builder =>
-        {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
-        });
-});
+
+//builder.Services.AddMemoryCache();
+//builder.Services.AddScoped<IInvestimentoService, InvestimentoService>();
+//builder.Services.AddScoped<IBancoCentralApiRepository, BancoCentralApiRepository>();
+//builder.Services.AddScoped<IGerenciamentoCacheRepository, GerenciamentoCacheRepository>();
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowInvestimento",
+//        builder =>
+//        {
+//            builder.AllowAnyOrigin()
+//                   .AllowAnyMethod()
+//                   .AllowAnyHeader();
+//        });
+//});
 
 var app = builder.Build();
 
