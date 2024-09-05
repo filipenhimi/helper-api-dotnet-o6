@@ -39,7 +39,7 @@ namespace helper_api_dotnet_o6.Controllers
                     return NotFound("CNPJ não encontrado.");
                 }
 
-                return Ok(converterModelToDTO(cnpjResponse));
+                return Ok(cnpjResponse);
             }
             catch (HttpRequestException ex) 
             {
