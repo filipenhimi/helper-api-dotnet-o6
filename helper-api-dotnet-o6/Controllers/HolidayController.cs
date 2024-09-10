@@ -1,6 +1,8 @@
 ﻿using helper_api_dotnet_o6.Models.Holiday;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace helper_api_dotnet_o6.Controllers
 {
