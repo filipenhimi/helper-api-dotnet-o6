@@ -10,6 +10,7 @@ namespace helper_api_dotnet_o6.Helpers
         public HttpRequestHelper(string endPoint)
         {
             _endPoint = endPoint;
+            
             _httpClient = new HttpClient();
         }
 
