@@ -10,9 +10,12 @@ namespace helper_api_dotnet_o6.Controllers
     public class CnpjController : ControllerBase
     {
         private readonly string _endPoint = "https://brasilapi.com.br/api/cnpj/v1/";
+        private readonly ILogger<CnpjController> _logger;
 
-        public CnpjController(ILogger<CnpjController> logger, HttpClient httpClient)
-        {}
+        public CnpjController(ILogger<CnpjController> logger)
+        {
+            _logger = logger;
+        }
 
         [HttpGet]
         [Route("{cnpj}")]
@@ -24,8 +27,8 @@ namespace helper_api_dotnet_o6.Controllers
         {
             var httpHelper = new HttpRequestHelper(_endPoint);
             var response = httpHelper.Get<CnpjModel>($"{cnpj}");
+            _logger.LogInformation("CNPJ: {cnpj}", cnpj);
             return response.Result;
-
         }
     }
 }
