@@ -1,20 +1,18 @@
-﻿using helper_api_dotnet_o6.Models.Feriado;
+﻿using helper_api_dotnet_o6.Models.Holiday;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace helper_api_dotnet_o6.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class FeriadoController : ControllerBase
+    public class HolidayController : ControllerBase
     {
         private readonly string _endPoint = "https://brasilapi.com.br/api/feriados/v1/";
-        private readonly ILogger<FeriadoController> _logger;
+        private readonly ILogger<HolidayController> _logger;
         private readonly HttpClient _httpClient;
 
-        public FeriadoController(ILogger<FeriadoController> logger, HttpClient httpClient)
+        public HolidayController(ILogger<HolidayController> logger, HttpClient httpClient)
         {
             _logger = logger;
             _httpClient = httpClient;
@@ -34,7 +32,7 @@ namespace helper_api_dotnet_o6.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var feriadosData = await response.Content.ReadAsStringAsync();
-                    var feriadosModel = JsonConvert.DeserializeObject<List<Feriado>>(feriadosData);
+                    var feriadosModel = JsonConvert.DeserializeObject<List<Holiday>>(feriadosData);
                     return Ok(feriadosModel);
                 }
 

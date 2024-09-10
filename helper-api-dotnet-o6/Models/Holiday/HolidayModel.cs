@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace helper_api_dotnet_o6.Models.Feriado
+namespace helper_api_dotnet_o6.Models.Holiday
 {
-    public class Feriado
+    public class Holiday
     {
         [JsonProperty("date")]
         public string Data { get; set; }
