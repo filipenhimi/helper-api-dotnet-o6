@@ -1,76 +1,80 @@
 ﻿using Newtonsoft.Json;
 
-namespace helper_api_dotnet_o6.Models.Cnpj
+namespace helper_api_dotnet_o6.Models.CnpjModel
 {
-    public class AtividadePrincipal
+    public class CnaesSecundario
     {
-        public string text { get; set; }
-        public string code { get; set; }
-    }
-
-    public class AtividadeSecundaria
-    {
-        public string text { get; set; }
-        public string code { get; set; }
+        public int codigo { get; set; }
+        public string descricao { get; set; }
     }
 
     public class Qsa
     {
-        public string nome { get; set; }
-        public string qual { get; set; }
+        public object pais { get; set; }
+        public string nome_socio { get; set; }
+        public object codigo_pais { get; set; }
+        public string faixa_etaria { get; set; }
+        public string cnpj_cpf_do_socio { get; set; }
+        public string qualificacao_socio { get; set; }
+        public int codigo_faixa_etaria { get; set; }
+        public string data_entrada_sociedade { get; set; }
+        public int identificador_de_socio { get; set; }
+        public string cpf_representante_legal { get; set; }
+        public string nome_representante_legal { get; set; }
+        public int codigo_qualificacao_socio { get; set; }
+        public string qualificacao_representante_legal { get; set; }
+        public int codigo_qualificacao_representante_legal { get; set; }
     }
 
     public class CnpjModel
     {
-        [JsonProperty("cnpj")]
-        public string Cnpj { get; set; }
-
-        [JsonProperty("razao_social")]
-        public string RazaoSocial { get; set; }
-
-        [JsonProperty("nome_fantasia")]
-        public string NomeFantasia { get; set; }
-
-        [JsonProperty("data_abertura")]
-        public string DataAbertura { get; set; }
-
-        [JsonProperty("atividade_principal")]
-        public List<AtividadePrincipal> AtividadePrincipal { get; set; }
-
-        [JsonProperty("atividades_secundarias")]
-        public List<AtividadeSecundaria> AtividadesSecundarias { get; set; }
-
-        [JsonProperty("natureza_juridica")]
-        public string NaturezaJuridica { get; set; }
-
-        [JsonProperty("logradouro")]
-        public string Logradouro { get; set; }
-
-        [JsonProperty("numero")]
-        public string Numero { get; set; }
-
-        [JsonProperty("complemento")]
-        public string Complemento { get; set; }
-
-        [JsonProperty("cep")]
-        public string Cep { get; set; }
-
-        [JsonProperty("bairro")]
-        public string Bairro { get; set; }
-
-        [JsonProperty("municipio")]
-        public string Municipio { get; set; }
-
-        [JsonProperty("uf")]
-        public string Uf { get; set; }
-
-        [JsonProperty("qsa")]
-        public List<Qsa> Qsa { get; set; }
-
-        [JsonProperty("capital_social")]
-        public string CapitalSocial { get; set; }
-
-        [JsonProperty("status")]
-        public string Status { get; set; }
+        public string uf { get; set; }
+        public string cep { get; set; }
+        public List<Qsa> qsa { get; set; }
+        public string cnpj { get; set; }
+        public object pais { get; set; }
+        public string email { get; set; }
+        public string porte { get; set; }
+        public string bairro { get; set; }
+        public string numero { get; set; }
+        public string ddd_fax { get; set; }
+        public string municipio { get; set; }
+        public string logradouro { get; set; }
+        public int cnae_fiscal { get; set; }
+        public object codigo_pais { get; set; }
+        public string complemento { get; set; }
+        public int codigo_porte { get; set; }
+        public string razao_social { get; set; }
+        public string nome_fantasia { get; set; }
+        public int capital_social { get; set; }
+        public string ddd_telefone_1 { get; set; }
+        public string ddd_telefone_2 { get; set; }
+        public object opcao_pelo_mei { get; set; }
+        public string descricao_porte { get; set; }
+        public int codigo_municipio { get; set; }
+        public List<CnaesSecundario> cnaes_secundarios { get; set; }
+        public string natureza_juridica { get; set; }
+        public string situacao_especial { get; set; }
+        public object opcao_pelo_simples { get; set; }
+        public int situacao_cadastral { get; set; }
+        public object data_opcao_pelo_mei { get; set; }
+        public object data_exclusao_do_mei { get; set; }
+        public string cnae_fiscal_descricao { get; set; }
+        public int codigo_municipio_ibge { get; set; }
+        public string data_inicio_atividade { get; set; }
+        public object data_situacao_especial { get; set; }
+        public object data_opcao_pelo_simples { get; set; }
+        public string data_situacao_cadastral { get; set; }
+        public string nome_cidade_no_exterior { get; set; }
+        public int codigo_natureza_juridica { get; set; }
+        public object data_exclusao_do_simples { get; set; }
+        public int motivo_situacao_cadastral { get; set; }
+        public string ente_federativo_responsavel { get; set; }
+        public int identificador_matriz_filial { get; set; }
+        public int qualificacao_do_responsavel { get; set; }
+        public string descricao_situacao_cadastral { get; set; }
+        public string descricao_tipo_de_logradouro { get; set; }
+        public string descricao_motivo_situacao_cadastral { get; set; }
+        public string descricao_identificador_matriz_filial { get; set; }
     }
 }

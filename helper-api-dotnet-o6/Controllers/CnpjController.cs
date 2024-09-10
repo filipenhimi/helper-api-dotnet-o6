@@ -1,8 +1,7 @@
-using helper_api_dotnet_o6.Models.Cnpj;
+using helper_api_dotnet_o6.Helpers;
+using helper_api_dotnet_o6.Models.CnpjModel;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+
 
 namespace helper_api_dotnet_o6.Controllers
 {
@@ -11,40 +10,22 @@ namespace helper_api_dotnet_o6.Controllers
     public class CnpjController : ControllerBase
     {
         private readonly string _endPoint = "https://brasilapi.com.br/api/cnpj/v1/";
-        private readonly ILogger<CnpjController> _logger;
-        private readonly HttpClient _httpClient;
 
         public CnpjController(ILogger<CnpjController> logger, HttpClient httpClient)
-        {
-            _logger = logger;
-            _httpClient = httpClient;
-        }
+        {}
 
         [HttpGet]
         [Route("{cnpj}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(CnpjModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get(string cnpj)
+        [ProducesResponseType(StatusCodes.Status502BadGateway)]
+        public async Task<CnpjModel> Get(string cnpj)
         {
-            try
-            {
-                var response = await _httpClient.GetAsync($"{_endPoint}{cnpj}");
+            var httpHelper = new HttpRequestHelper(_endPoint);
+            var response = httpHelper.Get<CnpjModel>($"{cnpj}");
+            return response.Result;
 
-                if (response.IsSuccessStatusCode)
-                {
-                    var cnpjData = await response.Content.ReadAsStringAsync();
-                    var cnpjModel = JsonConvert.DeserializeObject<CnpjData>(cnpjData);
-                    return Ok(cnpjModel);
-                }
-
-                return BadRequest("CNPJ inválido ou não encontrado.");
-            }
-            catch (HttpRequestException ex)
-            {
-                _logger.LogError(ex, "Erro ao consultar o CNPJ.");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Erro ao consultar o CNPJ.");
-            }
         }
     }
 }
