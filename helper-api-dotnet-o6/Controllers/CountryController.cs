@@ -9,6 +9,7 @@ namespace helper_api_dotnet_o6.Controllers
     public class CountryController : ControllerBase
     {
         private readonly string _endPoint = "https://servicodados.ibge.gov.br/api/v1";
+        
         private readonly ILogger<CountryController> _logger;
 
         public CountryController(ILogger<CountryController> logger)
