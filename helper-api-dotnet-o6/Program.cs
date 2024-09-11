@@ -5,7 +5,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configuração de CORS
+// Configuração de CORS (Cross-Origin Resource Sharing)
+// Isso permite que a API aceite requisições de uma origem específica (neste caso, "http://localhost:3000")
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",

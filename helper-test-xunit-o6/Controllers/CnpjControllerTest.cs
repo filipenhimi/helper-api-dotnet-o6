@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace helper_test_xunit_o6.Controllers
 {
     public class CnpjControllerTest
-    {
+    {   
+        // Teste para verificar se a rota "Cnpj" com um CNPJ válido
+        // retorna corretamente os detalhes do CNPJ em um objeto Root
         [Fact]
         public async Task ExecutaRotaCnpj_QuandoCnpjValido_EntaoRetornaDetalhesCnpj()
         {
@@ -30,6 +32,7 @@ namespace helper_test_xunit_o6.Controllers
 
             // Assert
 
+            // Verifica se o objeto de detalhes do CNPJ não é nulo
             Assert.NotNull(cnpjDetails);
         }
     }

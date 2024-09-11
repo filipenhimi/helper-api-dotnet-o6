@@ -11,6 +11,8 @@ namespace helper_test_xunit_o6.Helpers
 {
     public class HttpRequestHelperTest
     {
+        // Teste para verificar se uma chamada HTTP para uma rota válida retorna
+        // corretamente um objeto JSON deserializado do tipo Country
         [Fact]
         public async Task RealizaChamadaHttp_QuandoRotaExistente_EntaoRetornaJSONDeserializado()
         {
@@ -47,13 +49,15 @@ namespace helper_test_xunit_o6.Helpers
             Assert.Equal("Real", result.Moeda);
         }
 
+        // Teste para verificar se a rota "Feriados" retorna corretamente uma lista de feriados
         [Fact]
-        public async Task ExecutaRotaFeriados_QuandoAnoValido_EntaoRetornaListaDeFeriados()
+        public async Task RealizaChamadaHttp_QuandoAnoValido_EntaoRetornaListaDeFeriados()
         {
-            // Arrange
+            // Arrange - Preparação dos dados e do cenário
             var endPoint = "https://endpoint/api/v1";
-            var route = "Feriados";
+            var route = "Feriados";    // Rota sendo testada
 
+            // Lista de feriados esperados como resposta da chamada
             var expectedResponse = new List<Feriado>
             {
                 new Feriado { Data = "2024-01-01T00:00:00", Nome = "Confraternização mundial"},
@@ -71,6 +75,7 @@ namespace helper_test_xunit_o6.Helpers
                 new Feriado { Data = "2024-12-25T00:00:00", Nome = "Natal"}
             };
 
+            // Mockando o manipulador de mensagens HTTP para simular uma resposta da API
             var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
             mockHttpMessageHandler
                 .Protected()
@@ -85,13 +90,14 @@ namespace helper_test_xunit_o6.Helpers
                     Content = new StringContent(JsonConvert.SerializeObject(expectedResponse), Encoding.UTF8, "application/json")
                 });
 
+            // Criando um cliente HTTP com o manipulador simulado
             var httpClient = new HttpClient(mockHttpMessageHandler.Object);
             var httpRequestHelper = new HttpRequestHelper(endPoint, httpClient);
 
-            // Act
+            // Act - Executando a ação
             var result = await httpRequestHelper.Get<List<Feriado>>(route);
 
-            // Assert
+            // Assert - Verificando se o resultado é o esperado
             Assert.NotNull(result);
             Assert.Equal(expectedResponse.Count, result.Count); // Verifica se o número de feriados coincide
             for (int i = 0; i < expectedResponse.Count; i++)
@@ -101,19 +107,23 @@ namespace helper_test_xunit_o6.Helpers
             }
         }
 
+        // Teste para verificar se uma chamada HTTP para a rota "Cnpj" retorna corretamente
+        // os detalhes de um CNPJ
         [Fact]
         public async Task RealizaChamadaHttp_QuandoRotaCnpjExistente_EntaoRetornaDetalhesCnpj()
         {
-            // Arrange
+            // Arrange - Preparação dos dados e do cenário
             var endPoint = "https://endpoint/api/v1";
             var route = "Cnpj";
 
+            // Objeto esperado como resposta da chamada
             var expectedResponse = new Root
             {
                 cnpj = "05570714000159",
                 razao_social = "KABUM S.A."
             };
-            
+
+            // Mockando o manipulador de mensagens HTTP para simular uma resposta da API
             var mockHttpMessageHandler = new Mock<HttpMessageHandler>();
             mockHttpMessageHandler
                 .Protected()
@@ -128,18 +138,20 @@ namespace helper_test_xunit_o6.Helpers
                     Content = new StringContent(JsonConvert.SerializeObject(expectedResponse), Encoding.UTF8, "application/json")
                 });
 
+            // Criando um cliente HTTP com o manipulador simulado
             var httpClient = new HttpClient(mockHttpMessageHandler.Object);
             var httpRequestHelper = new HttpRequestHelper(endPoint, httpClient);
 
-            // Act
+            // Act - Executando a ação
             var result = await httpRequestHelper.Get<Root>(route);
 
-            // Assert
+            // Assert - Verificando se o resultado é o esperado
             Assert.NotNull(result);
             Assert.Equal("05570714000159", result.cnpj);
             Assert.Equal("KABUM S.A.", result.razao_social);
         }
 
+        // Classe auxiliar para deserialização da resposta da rota "Country"
         public class Country
         {
             public string Nome { get; set; }
