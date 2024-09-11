@@ -22,10 +22,9 @@ namespace helper_api_dotnet_o6_investimento.Repositories
             _memoryCache.Set(key, value, cacheEntryOptions);
         }
 
-        public T Obter<T>(string key)
+        public T? Obter<T>(string key)
         {
             _memoryCache.TryGetValue(key, out T value);
-            //var result = JsonConvert.DeserializeObject<T>();
             return value;
         }
 

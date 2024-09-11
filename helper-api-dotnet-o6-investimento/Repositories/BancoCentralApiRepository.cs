@@ -9,7 +9,7 @@ namespace helper_api_dotnet_o6_investimento.Repositories
         {
             this.BaseUri = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.";
         }
-        public async Task<List<DataValor>> ConsultarCdiMensal(string dataInicial = "01/08/2023", string dataFinal = "01/08/2024")
+        public async Task<List<DataValor>> ConsultarCdiMensal(string dataInicial, string dataFinal)
         {
             string action = $"4391/dados?formato=json&dataInicial={dataInicial}&dataFinal={dataFinal}";
             return await GetAsync<List<DataValor>>(action);

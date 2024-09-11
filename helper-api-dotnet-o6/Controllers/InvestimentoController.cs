@@ -11,8 +11,6 @@ namespace helper_api_dotnet_o6.Controllers
     [Route("[controller]")]
     public class InvestimentoController : ControllerBase
     {
-        //private readonly string _endPoint = "https://servicodados.ibge.gov.br/api/v1";
-        //private readonly ILogger<CountryController> _logger;
         private readonly IInvestimentoService _service;
         public InvestimentoController(IInvestimentoService service)
         {

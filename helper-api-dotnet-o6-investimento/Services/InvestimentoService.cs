@@ -38,25 +38,26 @@ namespace helper_api_dotnet_o6_investimento.Services
             }
         }
 
-        public async Task<List<CalcularInvestimentoResponse>> CalcularProvisaoInvestimentos(CalcularInvestimentoRequest request)
+        public async Task<CalcularInvestimentoResponse> CalcularProvisaoInvestimentos(CalcularInvestimentoRequest request)
         {
             var valorInicial = request.Valor;
             var mes = request.QuantidadeMeses;
             var taxaCdi = request.PorcentagemCdi;
 
-             var taxas = await ObterTaxas(taxaCdi);
+            var taxas = await ObterTaxas(taxaCdi);
 
             var rendimentosSelic = CalcularRendimentos(valorInicial, taxas.Selic, mes);
             var rendimentosIpca = CalcularRendimentos(valorInicial, taxas.Ipca, mes);
             var rendimentosCdi = CalcularRendimentos(valorInicial, taxas.Cdi * ConverterPorcentagemParaDecimal(taxaCdi), mes);
 
-            var lista = new List<CalcularInvestimentoResponse>();
+            var lista = new List<DadosGrafico>();
 
             for (int i = 0; i < mes; i++)
             {
-                lista.Add(new CalcularInvestimentoResponse(rendimentosCdi[i], rendimentosSelic[i], rendimentosIpca[i], $"{i + 1}"));
+                lista.Add(new DadosGrafico(rendimentosCdi[i], rendimentosSelic[i], rendimentosIpca[i], $"{i + 1}"));
             }
-            return lista;
+
+            return new CalcularInvestimentoResponse(lista, taxas);
         }
 
         private async Task<Taxas> ObterTaxas(double taxaCdi)
@@ -91,19 +92,6 @@ namespace helper_api_dotnet_o6_investimento.Services
             return rendimentos;
         }
 
-        private double ObterTaxaTotalPorMeses(double taxa, int meses) => taxa * meses;
-
-        //private async Task<double> ObterTaxaCdiMensalCalculada(CalcularInvestimentoRequest request, int meses, string dataInicial, string dataFinal)
-        //{
-        //    double taxaCdiMensal = await ObterTaxaCdiMensal(dataInicial, dataFinal);
-
-        //    double porcentagemCdi = ConverterPorcentagemParaDecimal(request.PorcentagemCdi);
-
-        //    double taxaCdiMensalCalculada = CalcularTaxaCdiMensal(taxaCdiMensal, porcentagemCdi);
-
-        //    return ObterTaxaTotalPorMeses(taxaCdiMensalCalculada, meses);
-        //}
-
         private async Task<double> ObterTaxaSelicMensal(string dataInicial, string dataFinal)
         {
             List<DataValor> selicUltimoAno = await _bacenApi.ConsultarSelicMensal(dataInicial, dataFinal);
@@ -124,7 +112,6 @@ namespace helper_api_dotnet_o6_investimento.Services
             return cdiUltimoAno.Average(r => r.Valor);
         }
 
-        //private static double CalcularTaxaCdiMensal(double taxaCdiMensal, double porcentagemCdi) => (taxaCdiMensal * porcentagemCdi);
         private static (string dataInicial, string dataFinal) ObterDatasConsultaTaxas()
         {
             string dataFinal = ObterDataFormatoDiaMesAno(DateTime.Now.AddMonths(-1));
@@ -132,7 +119,6 @@ namespace helper_api_dotnet_o6_investimento.Services
 
             return (dataInicial, dataFinal);
         }
-        //private static double CalcularResultado(double valor, double taxa) => (valor * (taxa / 100)) + valor;
         private static double ConverterPorcentagemParaDecimal(double porcentagem) => porcentagem / 100;
         private static string ObterDataFormatoDiaMesAno(DateTime data) => "01/" + data.ToString("MM/yyyy");
     }

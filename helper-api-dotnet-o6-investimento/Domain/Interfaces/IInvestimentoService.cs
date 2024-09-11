@@ -6,6 +6,6 @@ namespace helper_api_dotnet_o6_investimento.Domain.Interfaces
     public interface IInvestimentoService
     {
         Task<ObterCdiAtualResponse> ObterCdiAtual();
-        Task<List<CalcularInvestimentoResponse>> CalcularProvisaoInvestimentos(CalcularInvestimentoRequest request);
+        Task<CalcularInvestimentoResponse> CalcularProvisaoInvestimentos(CalcularInvestimentoRequest request);
     }
 }

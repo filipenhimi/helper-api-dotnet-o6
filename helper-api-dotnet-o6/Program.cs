@@ -15,21 +15,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCustomServices();
 
 
-//builder.Services.AddMemoryCache();
-//builder.Services.AddScoped<IInvestimentoService, InvestimentoService>();
-//builder.Services.AddScoped<IBancoCentralApiRepository, BancoCentralApiRepository>();
-//builder.Services.AddScoped<IGerenciamentoCacheRepository, GerenciamentoCacheRepository>();
-
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowInvestimento",
-//        builder =>
-//        {
-//            builder.AllowAnyOrigin()
-//                   .AllowAnyMethod()
-//                   .AllowAnyHeader();
-//        });
-//});
 
 var app = builder.Build();
 
