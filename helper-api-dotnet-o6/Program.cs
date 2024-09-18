@@ -1,4 +1,7 @@
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins"; 
+using helper_api_dotnet_o6.Configure;
+using helper_api_dotnet_o6_investimento.Domain.Interfaces;
+using helper_api_dotnet_o6_investimento.Repositories;
+using helper_api_dotnet_o6_investimento.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCustomServices();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,8 +32,7 @@ app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowSpecificOrigin"); 
-
+app.UseCors();
 app.UseAuthorization();
 
 app.UseCors();
