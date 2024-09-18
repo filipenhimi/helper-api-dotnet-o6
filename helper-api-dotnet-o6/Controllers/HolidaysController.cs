@@ -1,31 +1,32 @@
 using helper_api_dotnet_o6.Helpers;
 using helper_api_dotnet_o6.Models.Country;
+using helper_api_dotnet_o6.Models.Holidays;
 using Microsoft.AspNetCore.Mvc;
 
 namespace helper_api_dotnet_o6.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class CountryController : ControllerBase
+    public class HolidaysController : ControllerBase
     {
-        private readonly string _endPoint = "https://servicodados.ibge.gov.br/api/v1";
-        private readonly ILogger<CountryController> _logger;
+        private readonly string _endPoint = "https://brasilapi.com.br/api/";
+        private readonly ILogger<HolidaysController> _logger;
 
-        public CountryController(ILogger<CountryController> logger)
+        public HolidaysController(ILogger<HolidaysController> logger)
         {
             _logger = logger;
         }
 
         [HttpGet]
-        [Route("{siglas}")]
-        [ProducesResponseType(typeof(List<Country>), StatusCodes.Status200OK)]
+        [Route("{ano}")]
+        [ProducesResponseType(typeof(List<Holidays>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status502BadGateway)]
-        public async Task<IEnumerable<Country>> Get(string siglas)
+        public async Task<IEnumerable<Holidays>> Get(string ano)
         {
             var httpHelper = new HttpRequestHelper(_endPoint);
-            var countries = httpHelper.Get<List<Country>>($"paises/{siglas}");
+            var countries = httpHelper.Get<List<Holidays>>($"feriados/v1/{ano}");
             return countries.Result;
         }
     }

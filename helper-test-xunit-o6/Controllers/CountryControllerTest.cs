@@ -6,6 +6,9 @@ using Moq;
 
 namespace helper_test_xunit_o6.Controllers
 {
+    // Classe de testes para o CountryController
+    // Este teste verifica se a rota que busca dados de um país, dada uma sigla válida,
+    // retorna corretamente uma lista de objetos Country
     public class CountryControllerTest
     {
         [Fact]
