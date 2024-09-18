@@ -1,5 +1,4 @@
 using helper_api_dotnet_o6.Helpers;
-using helper_api_dotnet_o6.Models.Country;
 using helper_api_dotnet_o6_investimento.Domain.Interfaces;
 using helper_api_dotnet_o6_investimento.Domain.Request;
 using helper_api_dotnet_o6_investimento.Domain.Response;

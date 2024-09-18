@@ -3,14 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using helper_api_dotnet_o6.Models.Cnpj;
 using System;
 using System.Net;
-using System.Net.Http;
 using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using helper_api_dotnet_o6.Models.Cep;
-using helper_api_dotnet_o6.Models.Cnpj;
-using helper_api_dotnet_o6.Models;
-using System.Diagnostics;
 
 namespace helper_api_dotnet_o6.Controllers
 {
@@ -19,7 +12,7 @@ namespace helper_api_dotnet_o6.Controllers
     public class CnpjController : ControllerBase
     {
         private readonly string _endPoint = "https://brasilapi.com.br/api/cnpj/v1";
-        private readonly string _endPoint = "https://open.cnpja.com/office";
+        private readonly string _endPoint2 = "https://open.cnpja.com/office";
         private const int Status429LimiteMinutiExcedido = 429;
         private readonly ILogger<CnpjController> _logger;
 
@@ -86,8 +79,6 @@ namespace helper_api_dotnet_o6.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ocorreu um erro inesperado");
             }
         }
-    }
-
 
 
         [HttpGet]
@@ -154,11 +145,11 @@ namespace helper_api_dotnet_o6.Controllers
             }
         }
 
-        private async Task<Models.CnpjResponse> GetCnpjAsync(string cnpj)
+        private async Task<Models.Cnpj.CnpjResponse> GetCnpjAsync(string cnpj)
         {
             using (var httpClient = new HttpClient())
             {
-                var response = await httpClient.GetAsync($"{_endPoint}/{cnpj}");
+                var response = await httpClient.GetAsync($"{_endPoint2}/{cnpj}");
 
                 if (response.StatusCode == HttpStatusCode.BadRequest)
                 {

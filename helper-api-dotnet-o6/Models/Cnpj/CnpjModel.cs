@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace helper_api_dotnet_o6.Models.Cnpj
 {
